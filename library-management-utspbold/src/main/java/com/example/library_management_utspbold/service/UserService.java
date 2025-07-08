@@ -32,19 +32,19 @@ public class UserService implements UserDetailsService {
         Role userRole = roleRepository.findByName("ROLE_USER").orElseGet(() -> roleRepository.save(new Role("ROLE_USER")));
 
         // Seed admin
-        if (userRepository.findByUsername("admin").isEmpty()) {
+        if (userRepository.findByUsername("Alogo").isEmpty()) {
             User admin = new User();
             admin.setUsername("admin");
-            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setPassword(passwordEncoder.encode("Alogo.24"));
             admin.setEnabled(true);
             admin.setRoles(new HashSet<>(Arrays.asList(adminRole)));
             userRepository.save(admin);
         }
         // Seed user
-        if (userRepository.findByUsername("user").isEmpty()) {
+        if (userRepository.findByUsername("Ronaldo").isEmpty()) {
             User user = new User();
             user.setUsername("user");
-            user.setPassword(passwordEncoder.encode("user123"));
+            user.setPassword(passwordEncoder.encode("Ronaldo.7"));
             user.setEnabled(true);
             user.setRoles(new HashSet<>(Arrays.asList(userRole)));
             userRepository.save(user);
