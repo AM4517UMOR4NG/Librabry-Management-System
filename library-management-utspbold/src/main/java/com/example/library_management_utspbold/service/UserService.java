@@ -34,7 +34,7 @@ public class UserService implements UserDetailsService {
         // Seed admin
         if (userRepository.findByUsername("Alogo").isEmpty()) {
             User admin = new User();
-            admin.setUsername("admin");
+            admin.setUsername("Alogo");
             admin.setPassword(passwordEncoder.encode("Alogo.24"));
             admin.setEnabled(true);
             admin.setRoles(new HashSet<>(Arrays.asList(adminRole)));
@@ -43,7 +43,7 @@ public class UserService implements UserDetailsService {
         // Seed user
         if (userRepository.findByUsername("Ronaldo").isEmpty()) {
             User user = new User();
-            user.setUsername("user");
+            user.setUsername("Ronaldo");
             user.setPassword(passwordEncoder.encode("Ronaldo.7"));
             user.setEnabled(true);
             user.setRoles(new HashSet<>(Arrays.asList(userRole)));
