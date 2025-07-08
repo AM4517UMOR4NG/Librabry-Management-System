@@ -44,8 +44,7 @@ public class AuthController {
             String password = loginRequest.get("password");
 
             Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
-            );
+                    new UsernamePasswordAuthenticationToken(username, password));
 
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String token = jwtUtil.generateToken(userDetails.getUsername());
@@ -108,4 +107,4 @@ public class AuthController {
         }
         return ResponseEntity.status(401).build();
     }
-} 
+}

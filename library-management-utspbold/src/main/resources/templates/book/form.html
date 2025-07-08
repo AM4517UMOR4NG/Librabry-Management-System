@@ -2,33 +2,130 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Form Buku</title>
-    <link rel="stylesheet" th:href="@{css/book-form.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/book-form.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .main-form-card {
+            background: rgba(255,255,255,0.13);
+            box-shadow: 0 8px 32px 0 rgba(31,38,135,0.25);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 22px;
+            border: 1px solid rgba(255,255,255,0.18);
+            padding: 2.5rem 2rem 2rem 2rem;
+            max-width: 480px;
+            width: 100%;
+        }
+        .form-control {
+            background: rgba(255,255,255,0.2);
+            color: #222;
+            border: none;
+            border-radius: 10px;
+        }
+        .form-control:focus {
+            background: rgba(255,255,255,0.3);
+            box-shadow: 0 0 15px rgba(255,255,255,0.3);
+            color: #222;
+        }
+        .card-title, label, .form-text {
+            color: #222;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.2);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #23a6d5, #23d5ab);
+            border: none;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #e73c7e, #ee7752);
+        }
+        .back-link {
+            color: #4e54c8;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            color: #e73c7e;
+            text-decoration: underline;
+        }
+        .form-label {
+            font-weight: 600;
+        }
+        .form-section {
+            margin-bottom: 1.2rem;
+        }
+        .form-title-icon {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: #222;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1 th:if="${book.id}">Edit Buku</h1>
-        <h1 th:unless="${book.id}">Tambah Buku</h1>
-        
+    <div class="main-form-card">
+        <div class="text-center mb-4">
+            <span class="form-title-icon" th:if="${book.id}"><i class="fas fa-edit"></i></span>
+            <span class="form-title-icon" th:unless="${book.id}"><i class="fas fa-plus-circle"></i></span>
+            <h2 class="card-title mb-2" th:text="${book.id} != null ? 'Edit Buku' : 'Tambah Buku'"></h2>
+        </div>
         <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-            <form th:action="@{/books/save}" th:object="${book}" method="post">
+            <form th:action="@{/books/save}" th:object="${book}" method="post" class="needs-validation" novalidate>
                 <input type="hidden" th:field="*{id}"/>
-                
-                <label>Judul:</label>
-                <input type="text" th:field="*{title}" placeholder="Masukkan judul buku" required/>
-                
-                <label>Penulis:</label>
-                <input type="text" th:field="*{author}" placeholder="Masukkan nama penulis" required/>
-                
-                <label>ISBN:</label>
-                <input type="text" th:field="*{isbn}" placeholder="Masukkan nomor ISBN" required/>
-                
-                <button type="submit">Simpan</button>
+                <div class="form-section">
+                    <label class="form-label"><i class="fas fa-book"></i> Judul:</label>
+                    <input type="text" class="form-control" th:field="*{title}" placeholder="Masukkan judul buku" required/>
+                    <small class="form-text">Judul buku harus unik dan jelas.</small>
+                </div>
+                <div class="form-section">
+                    <label class="form-label"><i class="fas fa-user"></i> Penulis:</label>
+                    <input type="text" class="form-control" th:field="*{author}" placeholder="Masukkan nama penulis" required/>
+                    <small class="form-text">Nama penulis buku.</small>
+                </div>
+                <div class="form-section">
+                    <label class="form-label"><i class="fas fa-barcode"></i> ISBN:</label>
+                    <input type="text" class="form-control" th:field="*{isbn}" placeholder="Masukkan nomor ISBN" required/>
+                    <small class="form-text">Nomor ISBN resmi buku.</small>
+                </div>
+                <div class="row">
+                    <div class="col-6 form-section">
+                        <label class="form-label"><i class="fas fa-calendar-alt"></i> Tahun Terbit:</label>
+                        <input type="number" class="form-control" th:field="*{publicationYear}" placeholder="Contoh: 2024" min="1000" max="2100" required/>
+                        <small class="form-text">Tahun terbit buku.</small>
+                    </div>
+                    <div class="col-6 form-section">
+                        <label class="form-label"><i class="fas fa-layer-group"></i> Jumlah Stok:</label>
+                        <input type="number" class="form-control" th:field="*{quantity}" placeholder="Masukkan jumlah stok" min="1" required/>
+                        <small class="form-text">Jumlah buku yang tersedia.</small>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <span th:if="${book.id}"><i class="fas fa-save me-2"></i>Update</span>
+                        <span th:unless="${book.id}"><i class="fas fa-save me-2"></i>Simpan</span>
+                    </button>
+                </div>
             </form>
         </div>
-        
-        <div style="text-align: center;">
-            <a th:href="@{/books}">Kembali ke Daftar Buku</a>
+        <div class="text-center mt-3">
+            <a th:href="@{/books}" class="back-link">
+                <i class="fas fa-arrow-left me-1"></i>Kembali ke Daftar Buku
+            </a>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

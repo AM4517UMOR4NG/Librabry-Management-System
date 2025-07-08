@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <title>Daftar Anggota</title>
     <link rel="stylesheet" th:href="@{/css/member-list.css}">
@@ -8,7 +8,7 @@
     <h1>Daftar Member</h1>
     <div class="container">
         <!-- Tombol tambah member hanya tampil jika role adalah admin -->
-        <div class="add-member" th:if="${#authentication.name == 'admin'}">
+        <div class="add-member" sec:authorize="hasRole('ROLE_ADMIN')">
             <a th:href="@{/members/add}">Tambah Member Baru</a>
         </div>
 
@@ -28,11 +28,11 @@
                     <td th:text="${member.email}"></td>
                     <td class="actions">
                         <!-- Tombol edit dan hapus hanya tampil jika role adalah admin -->
-                        <a th:href="@{/members/edit/{id}(id=${member.id})}" 
-                           th:if="${#authentication.name == 'admin'}">Edit</a>
-                        <a th:href="@{/members/delete/{id}(id=${member.id})}" 
-                           class="delete" 
-                           th:if="${#authentication.name == 'admin'}" 
+                        <a th:href="@{/members/edit/{id}(id=${member.id})}"
+                           sec:authorize="hasRole('ROLE_ADMIN')">Edit</a>
+                        <a th:href="@{/members/delete/{id}(id=${member.id})}"
+                           class="delete"
+                           sec:authorize="hasRole('ROLE_ADMIN')"
                            onclick="return confirm('Apakah Anda yakin ingin menghapus anggota ini?')">Hapus</a>
                     </td>
                 </tr>

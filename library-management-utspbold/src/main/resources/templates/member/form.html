@@ -4,6 +4,7 @@
     <title>Form Member</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/member-form.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="bg-light">
     <div class="container py-5">
@@ -13,36 +14,40 @@
                     <div class="card-body">
                         <!-- Only show form for admin -->
                         <div sec:authorize="hasRole('ROLE_ADMIN')">
-                            <h1 class="card-title text-center mb-4" th:if="${member.id}">Edit Member</h1>
-                            <h1 class="card-title text-center mb-4" th:unless="${member.id}">Tambah Member</h1>
+                            <h1 class="card-title text-center mb-4" th:if="${member.id}"><i class="fas fa-user-edit"></i> Edit Member</h1>
+                            <h1 class="card-title text-center mb-4" th:unless="${member.id}"><i class="fas fa-user-plus"></i> Tambah Member</h1>
                             <form th:action="@{/members/save}" th:object="${member}" method="post" class="needs-validation" novalidate>
                                 <input type="hidden" th:field="*{id}"/>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Nama:</label>
+                                    <label class="form-label"><i class="fas fa-user"></i> Nama:</label>
                                     <input type="text" class="form-control" th:field="*{name}" placeholder="Masukkan Nama Anggota" required/>
+                                    <small class="form-text text-muted">Nama lengkap anggota perpustakaan.</small>
                                     <div class="invalid-feedback">
                                         Nama tidak boleh kosong
                                     </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Email:</label>
+                                    <label class="form-label"><i class="fas fa-envelope"></i> Email:</label>
                                     <input type="email" class="form-control" th:field="*{email}" placeholder="Masukkan Email Anggota" required/>
+                                    <small class="form-text text-muted">Email aktif anggota.</small>
                                     <div class="invalid-feedback">
                                         Email tidak valid
                                     </div>
                                 </div>
 
                                 <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-save me-2"></i>Simpan
+                                    </button>
                                 </div>
                             </form>
                         </div>
 
                         <!-- Show message for non-admin users -->
                         <div sec:authorize="!hasRole('ROLE_ADMIN')" class="alert alert-warning text-center">
-                            Maaf, hanya admin yang dapat menambah atau mengedit member.
+                            <i class="fas fa-exclamation-triangle me-2"></i>Maaf, hanya admin yang dapat menambah atau mengedit member.
                         </div>
 
                         <div class="text-center mt-3">

@@ -21,41 +21,41 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtUtil jwtUtil, UserDetailsService userDetailsService) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtUtil jwtUtil,
+            UserDetailsService userDetailsService) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(authorize -> authorize
-                // Public endpoints (no authentication required)
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/h2-console/**").permitAll()
-                .requestMatchers("/", "/home", "/index", "/login", "/error").permitAll()
-                // API endpoints require JWT authentication
-                .requestMatchers("/api/**").authenticated()
-                // Web endpoints (Thymeleaf) require session authentication
-                .requestMatchers("/books/**", "/members/**", "/loans/**").authenticated()
-                // Default fallback
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login")
-                .defaultSuccessUrl("/", true)
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout")
-                .permitAll()
-            )
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-            .headers(headers -> headers.disable());
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authorize -> authorize
+                        // Public endpoints (no authentication required)
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/h2-console/**").permitAll()
+                        .requestMatchers("/", "/home", "/index", "/login", "/error").permitAll()
+                        // API endpoints require JWT authentication
+                        .requestMatchers("/api/**").authenticated()
+                        // Web endpoints (Thymeleaf) require session authentication
+                        .requestMatchers("/books/**", "/members/**", "/loans/**").authenticated()
+                        // Default fallback
+                        .anyRequest().authenticated())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
+                        .permitAll())
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .headers(headers -> headers.disable());
 
         // Add JWT filter only for API endpoints
-        http.addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsService),
+                UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
@@ -76,5 +76,3 @@ public class SecurityConfig {
         return new CorsFilter(source);
     }
 }
-
-
