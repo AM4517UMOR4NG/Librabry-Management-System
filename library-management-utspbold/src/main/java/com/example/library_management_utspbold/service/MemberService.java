@@ -1,6 +1,3 @@
-
-
-
 package com.example.library_management_utspbold.service;
 
 import com.example.library_management_utspbold.model.Member;
@@ -40,5 +37,9 @@ public class MemberService {
     public void deleteMemberById(Long id) {
         memberRepository.deleteById(id);
     }
+
+    public long countMembers() {
+        return memberRepository.count();
     }
+}
 

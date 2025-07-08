@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         // Public endpoints (no authentication required)
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/h2-console/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/h2-console/**", "/favicon.ico").permitAll()
                         .requestMatchers("/", "/home", "/index", "/login", "/error").permitAll()
                         // API endpoints require JWT authentication
                         .requestMatchers("/api/**").authenticated()

@@ -1,5 +1,3 @@
-
-
 package com.example.library_management_utspbold.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,5 +27,16 @@ public class BookService {
     
     public void deleteBookById(Long id) {
         bookRepository.deleteById(id);
+    }
+    
+    public long countBooks() {
+        return bookRepository.count();
+    }
+    
+    public List<Book> searchBooks(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return getAllBooks();
+        }
+        return bookRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCaseOrIsbnContainingIgnoreCase(keyword, keyword, keyword);
     }
 }

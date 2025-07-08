@@ -32,4 +32,8 @@ public class LoanTransactionService {
     public void deleteLoanTransactionById(Long id) {
         loanTransactionRepository.deleteById(id);
     }
+
+    public long countLoans() {
+        return loanTransactionRepository.count();
+    }
 }

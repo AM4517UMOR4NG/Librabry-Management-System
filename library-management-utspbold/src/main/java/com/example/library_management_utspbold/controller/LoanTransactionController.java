@@ -66,6 +66,10 @@ public class LoanTransactionController {
                 loan.setReturnDate(new Date());
             }
         }
+        if (loan.getId() == null) {
+            loan.setReturned(false);
+            loan.setReturnDate(null);
+        }
         loanTransactionService.saveLoanTransaction(loan);
         return "redirect:/loans";
     }

@@ -53,5 +53,16 @@ public class BookController {
         bookService.deleteBookById(id);
         return "redirect:/books";
     }
+    
+    @GetMapping("/view/{id}")
+    public String viewBook(@PathVariable Long id, Model model) {
+        Book book = bookService.getBookById(id);
+        if (book == null) {
+            model.addAttribute("error", "Buku tidak ditemukan.");
+            return "redirect:/";
+        }
+        model.addAttribute("book", book);
+        return "book/detail";
+    }
 }
 
