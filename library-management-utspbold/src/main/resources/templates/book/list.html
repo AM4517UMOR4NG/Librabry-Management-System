@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Daftar Buku</title>
+    <link rel="stylesheet" th:href="@{/css/book-list.css}">
+</head>
+<body>
+    <div class="container">
+        <h1>Daftar Buku</h1>
+        
+        <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}" style="text-align: center; margin-bottom: 20px;">
+            <a th:href="@{/books/add}" class="add-button">+ Tambah Buku Baru</a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Judul</th>
+                    <th>Penulis</th>
+                    <th>ISBN</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="book, iterStat : ${books}" th:style="'animation-delay: ' + ${iterStat.index * 0.1} + 's'">
+                    <td th:text="${book.id}"></td>
+                    <td th:text="${book.title}"></td>
+                    <td th:text="${book.author}"></td>
+                    <td th:text="${book.isbn}"></td>
+                    <td class="action-links">
+                        <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                            <a th:href="@{/books/edit/{id}(id=${book.id})}" class="edit-link">Edit</a>
+                            <a th:href="@{/books/delete/{id}(id=${book.id})}"
+                               class="delete-link"
+                               onclick="return confirmDelete();">Hapus</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a th:href="@{/}">Kembali ke Beranda</a>
+        </div>
+    </div>
+
+    <script th:src="@{/js/book-list.js}"></script>
+</body>
+</html>

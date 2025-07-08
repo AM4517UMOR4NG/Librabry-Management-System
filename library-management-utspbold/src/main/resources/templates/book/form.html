@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Form Buku</title>
+    <link rel="stylesheet" th:href="@{css/book-form.css}">
+</head>
+<body>
+    <div class="container">
+        <h1 th:if="${book.id}">Edit Buku</h1>
+        <h1 th:unless="${book.id}">Tambah Buku</h1>
+        
+        <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+            <form th:action="@{/books/save}" th:object="${book}" method="post">
+                <input type="hidden" th:field="*{id}"/>
+                
+                <label>Judul:</label>
+                <input type="text" th:field="*{title}" placeholder="Masukkan judul buku" required/>
+                
+                <label>Penulis:</label>
+                <input type="text" th:field="*{author}" placeholder="Masukkan nama penulis" required/>
+                
+                <label>ISBN:</label>
+                <input type="text" th:field="*{isbn}" placeholder="Masukkan nomor ISBN" required/>
+                
+                <button type="submit">Simpan</button>
+            </form>
+        </div>
+        
+        <div style="text-align: center;">
+            <a th:href="@{/books}">Kembali ke Daftar Buku</a>
+        </div>
+    </div>
+</body>
+</html>
