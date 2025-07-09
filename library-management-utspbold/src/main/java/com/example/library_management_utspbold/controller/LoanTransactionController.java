@@ -5,11 +5,13 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.library_management_utspbold.model.LoanTransaction;
 import com.example.library_management_utspbold.service.BookService;
@@ -83,14 +85,62 @@ public class LoanTransactionController {
 
     // Method untuk mengembalikan buku
     @GetMapping("/return/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public String returnBook(@PathVariable Long id) {
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public String returnBook(@PathVariable Long id, Authentication authentication, RedirectAttributes redirectAttributes) {
         LoanTransaction loan = loanTransactionService.getLoanTransactionById(id);
-        if (loan != null && !loan.isReturned()) {
-            loan.setReturned(true);
-            loan.setReturnDate(new Date()); // Set tanggal pengembalian sebagai tanggal sekarang
-            loanTransactionService.saveLoanTransaction(loan); // Simpan perubahan status
+        if (loan == null) {
+            redirectAttributes.addFlashAttribute("error", "Transaksi peminjaman tidak ditemukan.");
+            return "redirect:/loans";
         }
-        return "redirect:/loans"; // Redirect kembali ke daftar transaksi pinjaman
+        // Jika user, pastikan hanya bisa return miliknya sendiri
+        if (authentication != null && authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_USER"))
+            && !authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            String username = authentication.getName();
+            if (loan.getMember() == null || loan.getMember().getUser() == null || !loan.getMember().getUser().getUsername().equals(username)) {
+                redirectAttributes.addFlashAttribute("error", "Anda tidak berhak mengembalikan buku ini.");
+                return "redirect:/loans";
+            }
+        }
+        if (!loan.isReturned()) {
+            loan.setReturned(true);
+            loan.setReturnDate(new java.util.Date());
+            loanTransactionService.saveLoanTransaction(loan);
+            redirectAttributes.addFlashAttribute("success", "Buku berhasil dikembalikan!");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Buku sudah dikembalikan sebelumnya.");
+        }
+        return "redirect:/loans";
+    }
+
+    @PostMapping("/borrow/{bookId}")
+    @PreAuthorize("hasRole('USER') and !hasRole('ADMIN')")
+    public String borrowBook(@PathVariable Long bookId, Authentication authentication, RedirectAttributes redirectAttributes) {
+        String username = authentication.getName();
+        var memberOpt = memberService.getAllMembers().stream()
+            .filter(m -> m.getUser() != null && m.getUser().getUsername().equals(username))
+            .findFirst();
+        if (memberOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Akun Anda belum terdaftar sebagai member perpustakaan.");
+            return "redirect:/books/view/" + bookId;
+        }
+        var book = bookService.getBookById(bookId);
+        if (book == null || book.getQuantity() == null || book.getQuantity() <= 0) {
+            redirectAttributes.addFlashAttribute("error", "Buku tidak tersedia.");
+            return "redirect:/books/view/" + bookId;
+        }
+        // Kurangi stok buku
+        book.setQuantity(book.getQuantity() - 1);
+        bookService.saveBook(book);
+        // Buat transaksi peminjaman
+        LoanTransaction loan = new LoanTransaction();
+        loan.setBook(book);
+        loan.setMember(memberOpt.get());
+        loan.setLoanDate(new Date());
+        loan.setDueDate(new Date(System.currentTimeMillis() + 14L * 24 * 60 * 60 * 1000)); // 14 hari
+        loan.setReturned(false);
+        loan.setReturnDate(null);
+        loanTransactionService.saveLoanTransaction(loan);
+        redirectAttributes.addFlashAttribute("success", "Peminjaman buku berhasil!");
+        return "redirect:/loans";
     }
 }
