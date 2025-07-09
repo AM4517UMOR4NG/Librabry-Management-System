@@ -3,8 +3,10 @@ package com.example.library_management_utspbold.controller;
 import com.example.library_management_utspbold.config.JwtUtil;
 import com.example.library_management_utspbold.model.Role;
 import com.example.library_management_utspbold.model.User;
+import com.example.library_management_utspbold.model.Member;
 import com.example.library_management_utspbold.repository.RoleRepository;
 import com.example.library_management_utspbold.repository.UserRepository;
+import com.example.library_management_utspbold.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,6 +38,9 @@ public class AuthController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private MemberService memberService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> loginRequest) {
@@ -86,6 +91,14 @@ public class AuthController {
             }
 
             userRepository.save(user);
+
+            // Buat Member otomatis
+            Member member = new Member();
+            member.setName(username);
+            member.setEmail(username + "@mail.com");
+            member.setMembershipDate(new java.util.Date());
+            member.setUser(user);
+            memberService.saveMember(member);
 
             Map<String, String> response = new HashMap<>();
             response.put("message", "User registered successfully");
