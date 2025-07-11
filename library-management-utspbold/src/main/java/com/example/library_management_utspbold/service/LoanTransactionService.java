@@ -3,6 +3,8 @@ package com.example.library_management_utspbold.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.library_management_utspbold.model.LoanTransaction;
@@ -35,5 +37,9 @@ public class LoanTransactionService {
 
     public long countLoans() {
         return loanTransactionRepository.count();
+    }
+
+    public Page<LoanTransaction> getLoanHistoryByUsername(String username, Pageable pageable) {
+        return loanTransactionRepository.findByMemberUserUsername(username, pageable);
     }
 }
