@@ -24,6 +24,10 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private Set<LoanTransaction> loanTransactions;
 
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true)
+    private User user;
+
     public Member(){
     }
 
@@ -87,5 +91,12 @@ public class Member {
 
     public void setMembershipDate(Date membershipDate) {
         this.membershipDate = membershipDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
     }
 }
