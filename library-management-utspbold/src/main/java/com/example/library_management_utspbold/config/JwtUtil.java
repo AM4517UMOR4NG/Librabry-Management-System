@@ -8,7 +8,7 @@ import java.util.function.Function;
 
 @Component
 public class JwtUtil {
-    private final String jwtSecret = "";
+    private final String jwtSecret = "your_secret_key_here"; // Replace with your actual secret key (78 characters long (or more))
     private final long jwtExpirationMs = 86400000; // 1 day
 
     public String generateToken(String username) {
