@@ -150,7 +150,7 @@
                 <i class="fas fa-exclamation-circle me-2"></i>
                 Username atau password salah!
             </div>
-            <form th:action="@{/login}" method="post" style="width:100%">
+            <form th:action="@{/login}" method="post">
                 <div class="form-floating">
                     <input type="text" class="form-control" id="username" name="username" placeholder="Username" required/>
                     <label for="username"><i class="fas fa-user me-2"></i>Username</label>
@@ -177,5 +177,18 @@
     </div>
 
     <script th:src="@{/js/login.js}"></script>
+    <script>
+        function togglePassword() {
+            const password = document.getElementById('password');
+            const icon = document.querySelector('.password-toggle i');
+            if (password.type === 'password') {
+                password.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                password.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+    </script>
 </body>
 </html>
