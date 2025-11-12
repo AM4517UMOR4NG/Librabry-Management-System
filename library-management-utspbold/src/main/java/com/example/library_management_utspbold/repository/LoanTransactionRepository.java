@@ -10,5 +10,5 @@ import com.example.library_management_utspbold.model.LoanTransaction;
 
 public interface LoanTransactionRepository extends JpaRepository<LoanTransaction, Long> {
     @Query("SELECT l FROM LoanTransaction l JOIN l.member m JOIN m.user u WHERE u.username = :username ORDER BY l.loanDate DESC")
-    Page<LoanTransaction> findByMemberUserUsername(@Param("username") String username, Pageable pageable);
+
 }
