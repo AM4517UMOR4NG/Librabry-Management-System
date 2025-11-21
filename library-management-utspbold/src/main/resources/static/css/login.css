@@ -248,3 +248,162 @@ h1 {
     background: white;
     transform: translateY(-50%) scale(0.85);
 }
+
+/* Extracted from login.html */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1500&q=80') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 40px 0 60px 0;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 0;
+}
+
+.login-wrapper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    min-height: unset;
+    position: relative;
+    z-index: 1;
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 32px;
+    box-shadow: 0 12px 48px 0 rgba(44,62,80,0.18), 0 2px 8px rgba(44,62,80,0.08);
+    padding: 3.5rem 2.8rem 2.5rem 2.8rem;
+    max-width: 480px;
+    width: 100%;
+    margin: 0 auto 40px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeInUp 0.7s cubic-bezier(0.4,0,0.2,1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 2.5px solid transparent;
+    background-clip: padding-box;
+    border-image: linear-gradient(120deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1)) 1;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.login-logo {
+    font-size: 4.2rem;
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 0.7rem;
+    text-shadow: 0 2px 12px rgba(165,28,48,0.13);
+}
+
+.login-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 0.3rem;
+    text-align: center;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 8px rgba(44,62,80,0.07);
+}
+
+.login-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.18rem;
+    margin-bottom: 1.7rem;
+    text-align: center;
+    font-weight: 500;
+}
+
+.form-floating {
+    width: 100%;
+    margin-bottom: 1.2rem;
+}
+
+.form-control {
+    border-radius: 14px;
+    border: 1.5px solid #eaeaea;
+    font-size: 1.18rem;
+    padding: 1.1rem 1.3rem;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 1px 4px rgba(44,62,80,0.04);
+}
+
+.form-control:focus {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.1);
+}
+
+.btn-primary {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.18rem;
+    width: 100%;
+    padding: 1.1rem 0;
+    margin-top: 0.7rem;
+    box-shadow: 0 4px 16px rgba(165,28,48,0.13);
+    transition: background 0.3s, transform 0.3s;
+}
+
+.btn-primary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px) scale(1.03);
+}
+
+.alert {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.login-footer {
+    margin-top: 2.2rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.05rem;
+    text-align: center;
+    opacity: 0.88;
+}
+
+@media (max-width: 600px) {
+    .login-card {
+        padding: 1.2rem 0.5rem 1rem 0.5rem;
+        max-width: 98vw;
+    }
+}
+
+/* Extracted from register.html (reuses login styles) */
+.register-card {
+    max-width: 480px;
+    margin: 0 auto 40px auto;
+}
+
+.register-footer {
+    margin-top: 2.2rem;
+    color: #888;
+    font-size: 1.05rem;
+    text-align: center;
+    opacity: 0.88;
+}
