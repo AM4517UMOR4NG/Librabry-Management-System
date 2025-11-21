@@ -1,0 +1,64 @@
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.detail-card {
+    background: rgba(255,255,255,0.97);
+    border-radius: 22px;
+    box-shadow: 0 8px 32px 0 rgba(31,38,135,0.13);
+    padding: 2.5rem 2rem 2rem 2rem;
+    max-width: 500px;
+    margin: 60px auto 0 auto;
+}
+.detail-title {
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+.detail-meta {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 1.2rem;
+}
+.detail-label {
+    font-weight: 600;
+    color: #3498db;
+}
+.detail-value {
+    color: #222;
+}
+.stock-badge {
+    font-size: 1rem;
+    padding: 0.4em 1em;
+    border-radius: 12px;
+}
+.btn-back {
+    background: linear-gradient(45deg, #3498db, #2c3e50);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 0.7rem 2rem;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+.btn-back:hover {
+    background: linear-gradient(45deg, #2c3e50, #3498db);
+    color: white;
+    transform: translateY(-2px);
+}
+.borrow-btn {
+    background: linear-gradient(45deg, #23d5ab, #23a6d5);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 0.7rem 2rem;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+.borrow-btn:hover {
+    background: linear-gradient(45deg, #23a6d5, #23d5ab);
+    color: white;
+    transform: translateY(-2px);
+}
