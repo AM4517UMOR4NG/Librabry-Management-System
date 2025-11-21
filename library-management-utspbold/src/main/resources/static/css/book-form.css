@@ -124,4 +124,119 @@ label {
 
 button:active {
     animation: buttonPulse 0.3s ease;
-} 
+}
+
+/* Extracted from templates/book/form.html */
+body {
+    min-height: 100vh;
+    background: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1500&q=80') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(44, 62, 80, 0.85) 0%, rgba(52, 152, 219, 0.85) 100%);
+    z-index: -1;
+}
+
+.main-form-card {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 2.5px solid transparent;
+    border-image: linear-gradient(120deg, #a51c30 0%, #3498db 100%) 1;
+    border-radius: 20px;
+    padding: 2.5rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-control {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    color: white;
+    padding: 0.8rem 1rem;
+}
+
+.form-control:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.card-title {
+    color: white;
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    margin-bottom: 2rem;
+}
+
+.form-label {
+    color: white;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.form-text {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #a51c30, #3498db);
+    border: none;
+    border-radius: 20px;
+    padding: 1rem 2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.back-link {
+    color: white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.15);
+    transition: all 0.3s ease;
+}
+
+.back-link:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+}
+
+.form-section {
+    margin-bottom: 1.5rem;
+}
+
+.form-title-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.invalid-feedback {
+    color: #ffa5a5;
+}
+
+::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
