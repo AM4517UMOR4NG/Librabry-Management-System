@@ -7,44 +7,64 @@
     <link rel="stylesheet" th:href="@{/css/login.css}">
 </head>
 
-<body>
-    <div class="login-wrapper">
-        <div class="login-card">
-            <div class="login-logo mb-2">
-                <i class="fas fa-university"></i>
+<body class="login-page">
+    <div id="particles" class="particles"></div>
+
+    <div class="auth-wrapper">
+        <div class="auth-panel hero-panel hero-visual" aria-hidden="true">
+            <div class="hero-visual__glow"></div>
+        </div>
+
+        <div class="auth-panel form-panel">
+            <div class="logo-chip">
+                <i class="fas fa-book-reader"></i>
             </div>
-            <div class="login-title mb-1">Perpustakaan Digital</div>
-            <div class="login-subtitle mb-3">Selamat datang di Sistem Informasi Perpustakaan<br>Silakan login untuk melanjutkan</div>
-            <div th:if="${param.logout}" class="alert alert-success">
+            <div class="form-heading">
+                <p class="eyebrow">Selamat Datang Kembali</p>
+                <h1>Masuk ke akun Anda</h1>
+                <p class="subtitle">Nikmati pengalaman mengelola perpustakaan yang lebih elegan.</p>
+            </div>
+
+            <div th:if="${param.logout}" class="alert alert-success mb-3">
                 <i class="fas fa-check-circle me-2"></i>
                 Anda berhasil logout.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <div th:if="${param.error}" class="alert alert-danger">
+            <div th:if="${param.error}" class="alert alert-danger mb-3">
                 <i class="fas fa-exclamation-circle me-2"></i>
-                Username atau password salah!
+                Username atau password salah.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <form th:action="@{/login}" method="post" style="width:100%">
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required/>
-                    <label for="username"><i class="fas fa-user me-2"></i>Username</label>
+
+            <form th:action="@{/login}" method="post" class="auth-form">
+                <div class="form-field">
+                    <label for="username">Username</label>
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" name="username" placeholder="Masukkan username" required />
+                    </div>
                 </div>
-                <div class="form-floating">
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required/>
-                    <label for="password"><i class="fas fa-lock me-2"></i>Password</label>
-                    <span class="password-toggle" onclick="togglePassword()">
-                        <i class="fas fa-eye"></i>
-                    </span>
+
+                <div class="form-field">
+                    <label for="password">Password</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" placeholder="Masukkan password" required />
+                        <span class="password-toggle" onclick="togglePassword()">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary mt-2">
-                    <i class="fas fa-sign-in-alt me-2"></i>Login
+
+                <button type="submit" class="btn btn-primary w-100 auth-submit">
+                    <span>Masuk Sekarang</span>
+                    <i class="fas fa-arrow-right"></i>
                 </button>
             </form>
-        </div>
-        <div class="login-footer mt-4">
-            <i class="fas fa-quote-left me-2"></i>Buku adalah jendela dunia. Mari membaca dan berkembang bersama perpustakaan!<i class="fas fa-quote-right ms-2"></i><br>
-            &copy; 2025 Perpustakaan Digital
-            <div style="margin-top:1.2rem;">
-                Belum punya akun? <a th:href="@{/register}">Daftar di sini</a>
+
+            <div class="form-footer">
+                <span>Belum punya akun?</span>
+                <a th:href="@{/register}">Daftar sekarang</a>
             </div>
         </div>
     </div>
