@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class MemberService {
@@ -20,13 +21,15 @@ public class MemberService {
     }
 
     public Member getMemberById(Long id) {
-        return memberRepository.findById(id).orElse(null);
+        Long safeId = Objects.requireNonNull(id, "Member ID must not be null");
+        return memberRepository.findById(safeId).orElse(null);
     }
 
     public void saveMember(Member member) {
-        System.out.println("Saving member: " + member);
+        Member safeMember = Objects.requireNonNull(member, "Member entity must not be null");
+        System.out.println("Saving member: " + safeMember);
         try {
-            memberRepository.save(member);
+            memberRepository.save(safeMember);
             System.out.println("Member saved successfully!");
         } catch (Exception e) {
             System.err.println("Error saving member: " + e.getMessage());
@@ -35,7 +38,8 @@ public class MemberService {
     }
 
     public void deleteMemberById(Long id) {
-        memberRepository.deleteById(id);
+        Long safeId = Objects.requireNonNull(id, "Member ID must not be null");
+        memberRepository.deleteById(safeId);
     }
 
     public long countMembers() {
