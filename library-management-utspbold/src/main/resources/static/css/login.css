@@ -407,3 +407,120 @@ body::before {
     text-align: center;
     opacity: 0.88;
 }
+
+/* Classic library-style layout for login & register pages */
+body.login-page {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 40px 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.login-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-card {
+    max-width: 380px;
+    width: 100%;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    background: transparent;
+    border: none;
+}
+
+.login-image-header {
+    height: 170px;
+    background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=800&q=80');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.login-header-text {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    background: rgba(230, 230, 0, 0.9);
+    padding: 8px 20px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #000;
+}
+
+.login-form-panel {
+    background-color: #005da4;
+    padding: 25px 35px 30px;
+    color: #ffffff;
+}
+
+.login-form-panel .login-title,
+.login-form-panel .login-subtitle {
+    color: #ffffff;
+    text-align: left;
+}
+
+.login-form-panel .login-title {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.login-form-panel .login-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 1.2rem;
+}
+
+.login-form-panel .form-label {
+    color: #ffffff;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.login-form-panel .form-control {
+    background-color: #ffffff;
+    color: #000000;
+    border-radius: 2px;
+    border: 1px solid #cccccc;
+    box-shadow: none;
+}
+
+.login-form-panel .form-control:focus {
+    background-color: #ffffff;
+    border-color: #66afe9;
+    box-shadow: none;
+}
+
+.login-form-panel .password-toggle {
+    color: #666666;
+}
+
+.login-form-panel .btn-primary {
+    background-color: #28a745;
+    border-color: #28a745;
+    border-radius: 2px;
+    padding: 6px 24px;
+    width: auto;
+}
+
+.login-form-panel .btn-primary:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+body.login-page .login-footer,
+body.login-page .register-footer {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+body.login-page .login-footer {
+    color: #333333;
+}
