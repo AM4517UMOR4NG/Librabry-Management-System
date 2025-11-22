@@ -5,46 +5,594 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/member-list.css}">
+    <style>
+        /* Ultra-modern member list styles */
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .hero-section {
+            position: relative;
+            padding: 3rem 2rem;
+            background: radial-gradient(circle at 30% 70%, rgba(34,197,94,0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 30%, rgba(16,185,129,0.15) 0%, transparent 50%);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .hero-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(34,197,94,0.4);
+            border-radius: 50%;
+            animation: float 25s infinite linear;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .hero-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .hero-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin: 0;
+            background: linear-gradient(135deg, #10b981 0%, #34d399 50%, #6ee7b7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .hero-subtitle {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            margin: 0.5rem 0 0 0;
+        }
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            border-radius: 999px;
+            padding: 0.8rem 1.5rem;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 14px rgba(16,185,129,0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16,185,129,0.4);
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 999px;
+            padding: 0.8rem 1.5rem;
+            color: #f8fafc;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.3);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: rgba(30,41,59,0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(34,197,94,0.3);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        }
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: white;
+            box-shadow: 0 8px 24px rgba(16,185,129,0.3);
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.3rem;
+        }
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .search-section {
+            margin-bottom: 2rem;
+        }
+        .search-container {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3.5rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(30,41,59,0.8);
+            backdrop-filter: blur(20px);
+            color: #f8fafc;
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(34,197,94,0.5);
+            box-shadow: 0 0 0 3px rgba(34,197,94,0.1), 0 15px 40px rgba(0,0,0,0.3);
+            transform: translateY(-1px);
+        }
+        .search-icon {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .member-card {
+            background: rgba(30,41,59,0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            transition: all 0.3s;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .member-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #10b981, #34d399, #6ee7b7);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+        .member-card:hover::before {
+            transform: scaleX(1);
+        }
+        .member-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(34,197,94,0.3);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.3);
+        }
+        .member-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .member-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #10b981, #34d399);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 8px 24px rgba(16,185,129,0.3);
+            flex-shrink: 0;
+        }
+        .member-info h3 {
+            margin: 0 0 0.3rem 0;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #f8fafc;
+        }
+        .member-info p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .member-details {
+            display: grid;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .detail-value {
+            color: #f8fafc;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .member-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .status-active {
+            background: rgba(34,197,94,0.15);
+            color: #4ade80;
+            border: 1px solid rgba(34,197,94,0.3);
+        }
+        .status-inactive {
+            background: rgba(248,113,113,0.15);
+            color: #f87171;
+            border: 1px solid rgba(248,113,113,0.3);
+        }
+        .member-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 0.6rem 1rem;
+            border-radius: 0.8rem;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: transparent;
+            color: #f8fafc;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+        .action-btn:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.25);
+            transform: translateY(-1px);
+        }
+        .action-btn.edit {
+            border-color: rgba(59,130,246,0.3);
+            color: #60a5fa;
+        }
+        .action-btn.edit:hover {
+            background: rgba(59,130,246,0.1);
+            border-color: rgba(59,130,246,0.5);
+        }
+        .action-btn.delete {
+            border-color: rgba(239,68,68,0.3);
+            color: #f87171;
+        }
+        .action-btn.delete:hover {
+            background: rgba(239,68,68,0.1);
+            border-color: rgba(239,68,68,0.5);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(30,41,59,0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        .empty-state i {
+            font-size: 4rem;
+            color: #fbbf24;
+            margin-bottom: 1.5rem;
+        }
+        .empty-state h3 {
+            margin: 0 0 1rem 0;
+            font-size: 1.5rem;
+            color: #f8fafc;
+        }
+        .empty-state p {
+            margin: 0 0 2rem 0;
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+        @media (max-width: 768px) {
+            .hero-header { flex-direction: column; align-items: flex-start; }
+            .hero-actions { width: 100%; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .members-grid { grid-template-columns: 1fr; }
+            .member-actions { flex-direction: column; }
+            .action-btn { min-width: auto; }
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <div class="page-header">
-            <h1>Daftar Member</h1>
-        </div>
-        <!-- Tombol tambah member hanya tampil jika role adalah admin -->
-        <div class="add-member" sec:authorize="hasRole('ROLE_ADMIN')">
-            <a th:href="@{/members/add}"><i class="fas fa-plus-circle"></i> Tambah Member Baru</a>
-        </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="member : ${members}">
-                    <td th:text="${member.id}"></td>
-                    <td th:text="${member.name}"></td>
-                    <td th:text="${member.email}"></td>
-                    <td class="actions">
-                        <!-- Tombol edit dan hapus hanya tampil jika role adalah admin -->
-                        <a th:href="@{/members/edit/{id}(id=${member.id})}"
-                           sec:authorize="hasRole('ROLE_ADMIN')">Edit</a>
-                        <a th:href="@{/members/delete/{id}(id=${member.id})}"
-                           class="delete"
-                           sec:authorize="hasRole('ROLE_ADMIN')"
-                           onclick="return confirm('Apakah Anda yakin ingin menghapus anggota ini?')">Hapus</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="back-link">
-            <a th:href="@{/}">Kembali</a>
+<body>
+    <div class="hero-section">
+        <div class="hero-particles" id="heroParticles"></div>
+        
+        <div class="hero-content">
+            <div class="hero-header">
+                <div>
+                    <h1 class="hero-title">
+                        <i class="fas fa-users"></i>
+                        Daftar Anggota
+                    </h1>
+                    <p class="hero-subtitle">Kelola data anggota perpustakaan dengan mudah dan efisien</p>
+                </div>
+                
+                <div class="hero-actions" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/members/add}" class="btn-primary">
+                        <i class="fas fa-user-plus"></i> Tambah Member
+                    </a>
+                    <a th:href="@{/}" class="btn-secondary">
+                        <i class="fas fa-home"></i> Kembali
+                    </a>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number" th:text="${#lists.size(members)}">0</div>
+                    <div class="stat-label">Total Anggota</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="stat-number">24</div>
+                    <div class="stat-label">Aktif Hari Ini</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Baru Minggu Ini</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-number">+12%</div>
+                    <div class="stat-label">Pertumbuhan</div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <div class="main-content">
+        <div class="search-section">
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Cari anggota berdasarkan nama atau email..." id="searchInput">
+            </div>
+        </div>
+
+        <div class="members-grid" id="membersGrid">
+            <div class="member-card" th:each="member : ${members}" th:data-name="${member.name}" th:data-email="${member.email}">
+                <div class="member-header">
+                    <div class="member-avatar" th:text="${member.name.substring(0,1).toUpperCase()}">A</div>
+                    <div class="member-info">
+                        <h3 th:text="${member.name}">Nama Anggota</h3>
+                        <p>
+                            <i class="fas fa-envelope"></i>
+                            <span th:text="${member.email}">email@example.com</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="member-details">
+                    <div class="detail-item">
+                        <span class="detail-label">
+                            <i class="fas fa-id-badge"></i> ID Anggota
+                        </span>
+                        <span class="detail-value" th:text="${member.id}">001</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">
+                            <i class="fas fa-calendar"></i> Bergabung
+                        </span>
+                        <span class="detail-value">15 Jan 2024</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">
+                            <i class="fas fa-book"></i> Buku Dipinjam
+                        </span>
+                        <span class="detail-value">3 buku</span>
+                    </div>
+                </div>
+
+                <div class="member-status status-active">
+                    <i class="fas fa-circle"></i> Aktif
+                </div>
+
+                <div class="member-actions" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a th:href="@{/members/edit/{id}(id=${member.id})}" class="action-btn edit">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <a th:href="@{/members/delete/{id}(id=${member.id})}" 
+                       class="action-btn delete"
+                       onclick="return confirm('Apakah Anda yakin ingin menghapus anggota ini?')">
+                        <i class="fas fa-trash"></i> Hapus
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(members)}" class="empty-state">
+            <i class="fas fa-users-slash"></i>
+            <h3>Belum Ada Anggota</h3>
+            <p>Mulai tambahkan anggota baru untuk mengelola perpustakaan Anda.</p>
+            <a th:href="@{/members/add}" class="btn-primary" sec:authorize="hasRole('ROLE_ADMIN')">
+                <i class="fas fa-user-plus"></i> Tambah Anggota Pertama
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Generate floating particles
+        const particlesContainer = document.getElementById('heroParticles');
+        if (particlesContainer) {
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 25 + 's';
+                particle.style.animationDuration = (20 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const membersGrid = document.getElementById('membersGrid');
+        
+        if (searchInput && membersGrid) {
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const memberCards = membersGrid.querySelectorAll('.member-card');
+                
+                memberCards.forEach(card => {
+                    const name = card.dataset.name?.toLowerCase() || '';
+                    const email = card.dataset.email?.toLowerCase() || '';
+                    
+                    if (name.includes(searchTerm) || email.includes(searchTerm)) {
+                        card.style.display = 'block';
+                        card.style.animation = 'fadeIn 0.3s ease-in';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Add fade in animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Animate cards on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeIn 0.6s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.member-card').forEach(card => {
+            card.style.opacity = '0';
+            observer.observe(card);
+        });
+    </script>
 </body>
 </html>
