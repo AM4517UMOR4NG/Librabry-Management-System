@@ -7,6 +7,7 @@ import com.example.library_management_utspbold.model.Book;
 import com.example.library_management_utspbold.repository.BookRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class BookService {
@@ -18,15 +19,18 @@ public class BookService {
     }
     
     public Book getBookById(Long id) {
-        return bookRepository.findById(id).orElse(null);
+        Long safeId = Objects.requireNonNull(id, "Book ID must not be null");
+        return bookRepository.findById(safeId).orElse(null);
     }
     
     public Book saveBook(Book book) {
-        return bookRepository.save(book);
+        Book safeBook = Objects.requireNonNull(book, "Book entity must not be null");
+        return bookRepository.save(safeBook);
     }
     
     public void deleteBookById(Long id) {
-        bookRepository.deleteById(id);
+        Long safeId = Objects.requireNonNull(id, "Book ID must not be null");
+        bookRepository.deleteById(safeId);
     }
     
     public long countBooks() {

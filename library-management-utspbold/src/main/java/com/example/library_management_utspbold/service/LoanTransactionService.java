@@ -1,6 +1,7 @@
 package com.example.library_management_utspbold.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,18 +22,21 @@ public class LoanTransactionService {
     }
 
     public LoanTransaction getLoanTransactionById(Long id) {
-        return loanTransactionRepository.findById(id).orElse(null);
+        Long safeId = Objects.requireNonNull(id, "LoanTransaction ID must not be null");
+        return loanTransactionRepository.findById(safeId).orElse(null);
     }
 
     public LoanTransaction saveLoanTransaction(LoanTransaction loanTransaction) {
-        if (loanTransaction.getBook() == null || loanTransaction.getMember() == null) {
+        LoanTransaction safeLoan = Objects.requireNonNull(loanTransaction, "LoanTransaction must not be null");
+        if (safeLoan.getBook() == null || safeLoan.getMember() == null) {
             throw new IllegalArgumentException("Harus terisi,baik itu Member maupun Loan");
         }
-        return loanTransactionRepository.save(loanTransaction);
+        return loanTransactionRepository.save(safeLoan);
     }
 
     public void deleteLoanTransactionById(Long id) {
-        loanTransactionRepository.deleteById(id);
+        Long safeId = Objects.requireNonNull(id, "LoanTransaction ID must not be null");
+        loanTransactionRepository.deleteById(safeId);
     }
 
     public long countLoans() {
