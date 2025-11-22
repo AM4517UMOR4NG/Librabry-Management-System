@@ -15,6 +15,7 @@ import com.example.library_management_utspbold.repository.UserRepository;
 import com.example.library_management_utspbold.repository.RoleRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
+import java.util.Objects;
 
 import com.example.library_management_utspbold.service.BookService;
 import com.example.library_management_utspbold.service.MemberService;
@@ -126,7 +127,8 @@ public class MainController {
     @org.springframework.security.access.prepost.PreAuthorize("hasRole('ADMIN')")
     public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
-            userRepository.deleteById(id);
+            Long safeId = Objects.requireNonNull(id, "User ID must not be null");
+            userRepository.deleteById(safeId);
             redirectAttributes.addFlashAttribute("success", "User berhasil dihapus.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Gagal menghapus user.");
