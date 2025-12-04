@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body class="dashboard-page">
+    <input type="checkbox" id="sidebarToggle" class="sidebar-toggle-checkbox" hidden>
+    <div class="dashboard-layout">
+        <aside class="sidebar">
+            <div class="sidebar__brand">
+                <label for="sidebarToggle" class="sidebar__toggle" aria-label="Toggle sidebar">
+                    <i class="fas fa-bars"></i>
+                </label>
+                <div>
+                    <h1>LMS</h1>
+                    <p>Control Center</p>
+                </div>
+            </div>
+            <nav class="sidebar__nav">
+                <a href="/dashboard" class="active"><i class="fas fa-gauge"></i><span>Dashboard</span></a>
+                <a href="/books"><i class="fas fa-book"></i><span>Catalog</span></a>
+                <a href="/loans"><i class="fas fa-right-left"></i><span>Loans</span></a>
+                <a href="/members"><i class="fas fa-users"></i><span>Members</span></a>
+                <a href="/reports"><i class="fas fa-chart-line"></i><span>Reports</span></a>
+                <sec:authorize access="hasRole('ADMIN')">
+                    <a href="/admin/settings"><i class="fas fa-gear"></i><span>System Settings</span></a>
+                </sec:authorize>
+            </nav>
+            <div class="sidebar__footer">
+                <p>&copy; <span th:text="${#dates.format(#dates.createNow(),'yyyy')}">2024</span> Library Suite</p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <div class="breadcrumb">
+                    <a href="/">Home</a>
+                    <span>/</span>
+                    <span>Dashboard</span>
+                </div>
+                <div class="topbar__actions">
+                    <div class="search-box">
+                        <i class="fas fa-magnifying-glass"></i>
+                        <input type="search" placeholder="Search books, members, loans">
+                    </div>
+                    <button class="icon-button" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                    <div class="user-chip">
+                        <img src="https://i.pravatar.cc/40" alt="avatar">
+                        <div>
+                            <p class="user-chip__name" th:text="${username}">User</p>
+                            <p class="user-chip__role" th:text="${authorities}">Role</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="summary-grid" aria-label="Summary cards">
+                <sec:authorize access="hasAnyRole('ADMIN','LIBRARIAN')">
+                    <article class="summary-card">
+                        <header>
+                            <p>Active Loans</p>
+                            <i class="fas fa-book-open"></i>
+                        </header>
+                        <strong th:text="${loanCount}">128</strong>
+                        <small>Loans currently checked out</small>
+                    </article>
+                    <article class="summary-card warning">
+                        <header>
+                            <p>Overdue</p>
+                            <i class="fas fa-triangle-exclamation"></i>
+                        </header>
+                        <strong>12</strong>
+                        <small>Require follow-up today</small>
+                    </article>
+                    <article class="summary-card success">
+                        <header>
+                            <p>Available Books</p>
+                            <i class="fas fa-layer-group"></i>
+                        </header>
+                        <strong th:text="${bookCount}">530</strong>
+                        <small>Total items ready for loan</small>
+                    </article>
+                </sec:authorize>
+
+                <sec:authorize access="hasRole('MEMBER') and !hasAnyRole('ADMIN','LIBRARIAN')">
+                    <article class="summary-card">
+                        <header>
+                            <p>My Loans</p>
+                            <i class="fas fa-book-open-reader"></i>
+                        </header>
+                        <strong>3</strong>
+                        <small>Items to return</small>
+                    </article>
+                    <article class="summary-card">
+                        <header>
+                            <p>Reservations</p>
+                            <i class="fas fa-bookmark"></i>
+                        </header>
+                        <strong>2</strong>
+                        <small>Waiting for availability</small>
+                    </article>
+                    <article class="summary-card warning">
+                        <header>
+                            <p>Fines</p>
+                            <i class="fas fa-coins"></i>
+                        </header>
+                        <strong>$4.50</strong>
+                        <small>Settle before 22 Nov</small>
+                    </article>
+                </sec:authorize>
+            </section>
+
+            <section class="content-grid" aria-label="Main content">
+                <article class="panel activity-panel">
+                    <div class="panel__header">
+                        <h2>Recent Activity</h2>
+                        <a href="/reports" class="link">View all</a>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Activity</th>
+                                <th>User</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>08:15</td>
+                                <td>Loan created for "Atomic Habits"</td>
+                                <td>Hanna</td>
+                                <td><span class="badge success">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>09:02</td>
+                                <td>Reservation fulfilled "Deep Work"</td>
+                                <td>Ari</td>
+                                <td><span class="badge info">Notified</span></td>
+                            </tr>
+                            <tr>
+                                <td>10:24</td>
+                                <td>Fine payment recorded</td>
+                                <td>Riko</td>
+                                <td><span class="badge success">Paid</span></td>
+                            </tr>
+                            <tr>
+                                <td>10:41</td>
+                                <td>New book imported via CSV</td>
+                                <td>System</td>
+                                <td><span class="badge neutral">Queued</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </article>
+
+                <article class="panel side-panel">
+                    <div class="panel__header">
+                        <h2>Quick Actions</h2>
+                    </div>
+                    <sec:authorize access="hasAnyRole('ADMIN','LIBRARIAN')">
+                        <div class="quick-actions">
+                            <button><i class="fas fa-plus"></i> Add Book</button>
+                            <button><i class="fas fa-right-left"></i> New Loan</button>
+                            <button><i class="fas fa-file-import"></i> Import CSV</button>
+                        </div>
+                    </sec:authorize>
+                    <sec:authorize access="hasRole('MEMBER') and !hasAnyRole('ADMIN','LIBRARIAN')">
+                        <p class="info-text">Tips for you</p>
+                        <ul class="member-tips">
+                            <li>Renew loans 2 days before due date.</li>
+                            <li>Enable reminders in Profile &gt; Settings.</li>
+                        </ul>
+                        <a class="button-ghost" href="/profile">Manage profile</a>
+                    </sec:authorize>
+
+                    <div class="mini-chart">
+                        <div class="panel__header">
+                            <h3>Loans / Month</h3>
+                            <span>Rolling 6 months</span>
+                        </div>
+                        <div class="chart-bars">
+                            <div><span style="height: 65%"></span><p>Jun</p></div>
+                            <div><span style="height: 80%"></span><p>Jul</p></div>
+                            <div><span style="height: 55%"></span><p>Aug</p></div>
+                            <div><span style="height: 90%"></span><p>Sep</p></div>
+                            <div><span style="height: 70%"></span><p>Oct</p></div>
+                            <div><span style="height: 60%"></span><p>Nov</p></div>
+                        </div>
+                    </div>
+                </article>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
