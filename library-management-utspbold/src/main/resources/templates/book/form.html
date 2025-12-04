@@ -5,59 +5,374 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/book-form.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Modern book form fallback styles */
+        * { box-sizing: border-box; }
+        body.book-form-page {
+            margin: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            padding: 2rem clamp(1rem, 5vw, 4rem);
+            line-height: 1.6;
+        }
+        .form-hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 0.35em;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            margin: 0 0 0.4rem 0;
+            font-weight: 600;
+        }
+        .form-hero h1 {
+            margin: 0.3rem 0;
+            font-size: clamp(1.8rem, 3vw, 2.6rem);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .subtitle {
+            margin: 0.2rem 0 0;
+            color: #cbd5e1;
+            font-size: 1rem;
+        }
+        .hero-actions {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .ghost-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            border-radius: 0.9rem;
+            padding: 0.75rem 1.2rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: transparent;
+            color: #f8fafc;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ghost-button:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.25);
+        }
+        .form-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .book-form {
+            background: rgba(30,41,59,0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        .form-section:last-child { margin-bottom: 0; }
+        .form-section h2 {
+            margin: 0 0 1.5rem 0;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #f8fafc;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid rgba(59,130,246,0.3);
+        }
+        .grid {
+            display: grid;
+            gap: 1.2rem;
+        }
+        .grid.two-column { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        .grid.three-column { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+        .form-section label {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+        .form-section input,
+        .form-section select,
+        .form-section textarea {
+            border-radius: 0.8rem;
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 0.8rem 1rem;
+            background: rgba(15,23,42,0.8);
+            color: #f8fafc;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+        .form-section input:focus,
+        .form-section select:focus,
+        .form-section textarea:focus {
+            outline: none;
+            border-color: rgba(59,130,246,0.5);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+            background: rgba(15,23,42,0.9);
+        }
+        .form-section textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .solid-button {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border: none;
+            border-radius: 0.9rem;
+            padding: 0.8rem 1.8rem;
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+        }
+        .solid-button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37,99,235,0.4);
+        }
+        .solid-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .preview-panel {
+            position: sticky;
+            top: 2rem;
+            background: rgba(30,41,59,0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            height: fit-content;
+        }
+        .preview-panel h2 {
+            margin: 0 0 1.5rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f8fafc;
+        }
+        .preview-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .preview-cover {
+            width: 100%;
+            aspect-ratio: 3/4;
+            border-radius: 0.8rem;
+            background: linear-gradient(145deg, #4f46e5, #7c3aed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1rem;
+            box-shadow: 0 8px 24px rgba(79,70,229,0.3);
+        }
+        .preview-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+            color: #f8fafc;
+        }
+        .preview-author {
+            color: #94a3b8;
+            margin: 0 0 1rem 0;
+            font-size: 0.9rem;
+        }
+        .preview-meta {
+            display: grid;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+        .preview-meta strong {
+            color: #cbd5e1;
+            font-weight: 600;
+        }
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            background: rgba(34,197,94,0.15);
+            border: 1px solid rgba(34,197,94,0.3);
+            border-radius: 0.8rem;
+            color: #4ade80;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .access-denied {
+            background: rgba(30,41,59,0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 1.5rem;
+            padding: 3rem;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            max-width: 600px;
+            margin: 4rem auto;
+        }
+        .access-denied i {
+            font-size: 4rem;
+            color: #fbbf24;
+            margin-bottom: 1.5rem;
+        }
+        .access-denied h2 {
+            margin: 0 0 1rem 0;
+            font-size: 1.8rem;
+            color: #f8fafc;
+        }
+        .access-denied p {
+            margin: 0 0 2rem 0;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+        @media (max-width: 1024px) {
+            .form-layout { grid-template-columns: 1fr; }
+            .preview-panel { position: static; }
+        }
+        @media (max-width: 640px) {
+            body.book-form-page { padding: 1.5rem; }
+            .form-hero { flex-direction: column; align-items: flex-start; }
+            .hero-actions { width: 100%; }
+            .form-actions { flex-direction: column; }
+            .grid.two-column, .grid.three-column { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 
-<body>
-    <div class="main-form-card">
-        <div class="text-center mb-4">
-            <span class="form-title-icon" th:if="${book.id}"><i class="fas fa-edit"></i></span>
-            <span class="form-title-icon" th:unless="${book.id}"><i class="fas fa-plus-circle"></i></span>
-            <h2 class="card-title mb-2" th:text="${book.id} != null ? 'Edit Buku' : 'Tambah Buku'"></h2>
+<body class="book-form-page">
+    <header class="form-hero">
+        <div>
+            <p class="eyebrow">Cataloging</p>
+            <h1 th:text="${book.id} != null ? 'Edit Buku' : 'Tambah Buku'"></h1>
+            <p class="subtitle">Lengkapi metadata buku dan informasi copy sebelum dipublikasikan.</p>
         </div>
-        <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-            <form th:action="@{/books/save}" th:object="${book}" method="post" class="needs-validation" novalidate>
-                <input type="hidden" th:field="*{id}"/>
-                <div class="form-section">
-                    <label class="form-label"><i class="fas fa-book"></i> Judul:</label>
-                    <input type="text" class="form-control" th:field="*{title}" placeholder="Masukkan judul buku" required/>
-                    <small class="form-text">Judul buku harus unik dan jelas.</small>
-                </div>
-                <div class="form-section">
-                    <label class="form-label"><i class="fas fa-user"></i> Penulis:</label>
-                    <input type="text" class="form-control" th:field="*{author}" placeholder="Masukkan nama penulis" required/>
-                    <small class="form-text">Nama penulis buku.</small>
-                </div>
-                <div class="form-section">
-                    <label class="form-label"><i class="fas fa-barcode"></i> ISBN:</label>
-                    <input type="text" class="form-control" th:field="*{isbn}" placeholder="Masukkan nomor ISBN" required/>
-                    <small class="form-text">Nomor ISBN resmi buku.</small>
-                </div>
-                <div class="row">
-                    <div class="col-6 form-section">
-                        <label class="form-label"><i class="fas fa-calendar-alt"></i> Tahun Terbit:</label>
-                        <input type="number" class="form-control" th:field="*{publicationYear}" placeholder="Contoh: 2024" min="1000" max="2100" required/>
-                        <small class="form-text">Tahun terbit buku.</small>
-                    </div>
-                    <div class="col-6 form-section">
-                        <label class="form-label"><i class="fas fa-layer-group"></i> Jumlah Stok:</label>
-                        <input type="number" class="form-control" th:field="*{quantity}" placeholder="Masukkan jumlah stok" min="1" required/>
-                        <small class="form-text">Jumlah buku yang tersedia.</small>
-                    </div>
-                </div>
-                <div class="d-grid gap-2 mt-4">
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        <span th:if="${book.id}"><i class="fas fa-save me-2"></i>Update</span>
-                        <span th:unless="${book.id}"><i class="fas fa-save me-2"></i>Simpan</span>
-                    </button>
-                </div>
-            </form>
+        <div class="hero-actions">
+            <a class="ghost-button" href="/books/import"><i class="fas fa-file-import"></i> Import CSV</a>
+            <a class="ghost-button" href="/books"><i class="fas fa-arrow-left"></i> Kembali</a>
         </div>
-        <div class="text-center mt-3">
-            <a th:href="@{/books}" class="back-link">
-                <i class="fas fa-arrow-left me-1"></i>Kembali ke Daftar Buku
-            </a>
-        </div>
+    </header>
+
+    <div class="form-layout" th:if="${#authorization.expression('hasAnyRole(''ADMIN'',''LIBRARIAN'')')}">
+        <form th:action="@{/books/save}" th:object="${book}" method="post" class="book-form">
+            <input type="hidden" th:field="*{id}" />
+            <section class="form-section">
+                <h2>Informasi Dasar</h2>
+                <div class="grid two-column">
+                    <label>ISBN
+                        <input type="text" th:field="*{isbn}" placeholder="978-..." required>
+                    </label>
+                    <label>Judul
+                        <input type="text" th:field="*{title}" placeholder="Judul buku" required>
+                    </label>
+                    <label>Subjudul
+                        <input type="text" th:field="*{subtitle}" placeholder="Opsional">
+                    </label>
+                    <label>Penulis
+                        <input type="text" th:field="*{author}" placeholder="Nama penulis" required>
+                    </label>
+                    <label>Penerbit
+                        <input type="text" th:field="*{publisher}" placeholder="Nama penerbit">
+                    </label>
+                    <label>Tahun Terbit
+                        <input type="number" th:field="*{publicationYear}" min="1000" max="2100" placeholder="2024" required>
+                    </label>
+                </div>
+            </section>
+
+            <section class="form-section">
+                <h2>Kategori & Metadata</h2>
+                <div class="grid two-column">
+                    <label>Bahasa
+                        <select name="language">
+                            <option>Indonesia</option>
+                            <option>English</option>
+                        </select>
+                    </label>
+                    <label>Kategori
+                        <select name="category" multiple>
+                            <option>Fiksi</option>
+                            <option>Teknologi</option>
+                            <option>Bisnis</option>
+                        </select>
+                    </label>
+                    <label>Jumlah Copy
+                        <input type="number" th:field="*{quantity}" min="1" placeholder="5" required>
+                    </label>
+                    <label>Lokasi Rak
+                        <input type="text" name="location" placeholder="FIK-02">
+                    </label>
+                </div>
+            </section>
+
+            <section class="form-section full">
+                <h2>Deskripsi & Cover</h2>
+                <label>Deskripsi
+                    <textarea name="description" rows="5" placeholder="Ringkasan buku"></textarea>
+                </label>
+                <label>Upload Cover
+                    <input type="file" name="cover">
+                </label>
+            </section>
+
+            <div class="form-actions">
+                <button type="button" class="ghost-button"><i class="fas fa-barcode"></i> Assign Barcode</button>
+                <button type="submit" class="solid-button">
+                    <span th:text="${book.id} != null ? 'Update Buku' : 'Simpan Buku'"></span>
+                </button>
+            </div>
+        </form>
+
+        <aside class="form-preview">
+            <div class="preview-card">
+                <p class="eyebrow">Preview</p>
+                <div class="preview-cover" th:text="${book.title != null} ? ${book.title.substring(0,1)} : 'B'">B</div>
+                <h3 th:text="${book.title}">Judul Buku</h3>
+                <p class="muted" th:text="${book.author}">Penulis</p>
+                <p class="muted">ISBN <span th:text="${book.isbn}">978</span></p>
+                <p class="muted">Stok: <span th:text="${book.quantity}">5</span></p>
+            </div>
+        </aside>
     </div>
+
+    <div th:unless="${#authorization.expression('hasAnyRole(''ADMIN'',''LIBRARIAN'')')}" class="restricted">
+        <i class="fas fa-lock"></i>
+        <p>Anda tidak memiliki akses ke halaman ini.</p>
+        <a href="/" class="ghost-button">Kembali</a>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

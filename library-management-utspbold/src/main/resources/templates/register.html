@@ -6,43 +6,73 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/login.css}">
 </head>
-<body>
-    <div class="login-wrapper">
-        <div class="login-card register-card">
-            <div class="login-logo mb-2">
-                <i class="fas fa-user-plus"></i>
+<body class="login-page">
+    <div id="particles" class="particles"></div>
+
+    <div class="auth-wrapper">
+        <div class="auth-panel hero-panel hero-visual" aria-hidden="true">
+            <div class="hero-visual__glow"></div>
+        </div>
+
+        <div class="auth-panel form-panel">
+            <div class="logo-chip">
+                <i class="fas fa-feather-alt"></i>
             </div>
-            <div class="login-title mb-1">Registrasi Akun</div>
-            <div class="login-subtitle mb-3">Silakan isi data di bawah untuk membuat akun baru</div>
-            <form th:action="@{/register}" method="post" style="width:100%">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required/>
-                    <label for="username"><i class="fas fa-user me-2"></i>Username</label>
+            <div class="form-heading">
+                <p class="eyebrow">Langkah Pertama</p>
+                <h1>Buat Akun Baru</h1>
+                <p class="subtitle">Isi informasi di bawah untuk mulai mengelola perpustakaan.</p>
+            </div>
+
+            <form th:action="@{/register}" method="post" class="auth-form">
+                <div class="form-field">
+                    <label for="username">Username</label>
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" name="username" placeholder="Pilih username" required>
+                    </div>
                 </div>
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Nama Lengkap" required/>
-                    <label for="name"><i class="fas fa-id-card me-2"></i>Nama Lengkap</label>
+
+                <div class="form-field">
+                    <label for="name">Nama Lengkap</label>
+                    <div class="input-icon">
+                        <i class="fas fa-id-card"></i>
+                        <input type="text" id="name" name="name" placeholder="Nama lengkap" required />
+                    </div>
                 </div>
-                <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" required/>
-                    <label for="email"><i class="fas fa-envelope me-2"></i>Email</label>
+
+                <div class="form-field">
+                    <label for="email">Email</label>
+                    <div class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" placeholder="Alamat email" required />
+                    </div>
                 </div>
-                <div class="form-floating mb-3">
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required/>
-                    <label for="password"><i class="fas fa-lock me-2"></i>Password</label>
-                    <span class="password-toggle" onclick="togglePassword()">
-                        <i class="fas fa-eye"></i>
-                    </span>
+
+                <div class="form-field">
+                    <label for="password">Password</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" placeholder="Buat password" required />
+                        <span class="password-toggle" onclick="togglePassword()">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary mt-2 w-100">
-                    <i class="fas fa-user-plus me-2"></i>Daftar
+
+                <button type="submit" class="btn btn-primary w-100 auth-submit">
+                    <span>Daftar Sekarang</span>
+                    <i class="fas fa-user-check"></i>
                 </button>
             </form>
-        </div>
-        <div class="register-footer mt-4">
-            Sudah punya akun? <a th:href="@{/login}">Login di sini</a>
+
+            <div class="form-footer">
+                <span>Sudah punya akun?</span>
+                <a th:href="@{/login}">Login di sini</a>
+            </div>
         </div>
     </div>
+
     <script th:src="@{/js/login.js}"></script>
 </body>
-</html> 
+</html>
