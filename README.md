@@ -1,4 +1,4 @@
-# 🏛️ Library Management System (Spring Boot)
+# Library Management System (Spring Boot)
 
 A Library Management System built with **Spring Boot 3**, featuring JWT authentication, role-based access control, and a responsive web interface using Thymeleaf.
 
@@ -131,4 +131,5 @@ This project is licensed under the MIT License.
 - Backend API: http://localhost:8481
 - H2 Console: http://localhost:8481/h2-console
 - Web Login: http://localhost:8481/login
+
 
