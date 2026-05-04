@@ -127,9 +127,3 @@ This project is licensed under the MIT License.
 ---
 
 
-### Access URLs
-- Backend API: http://localhost:8481
-- H2 Console: http://localhost:8481/h2-console
-- Web Login: http://localhost:8481/login
-
-
